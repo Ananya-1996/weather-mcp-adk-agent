@@ -1,183 +1,192 @@
-# 🌦 Smart Meeting Scheduler Agent (ADK + MCP)
+# 🤖 Sales AI Assistant (GenAI + FastAPI + Cloud Run)
 
-## 🚀 Live Demo
-
-👉 https://weather-agent-593321241935.us-central1.run.app/ask?query=schedule meeting in bangalore
-
----
-
-## 🧠 Overview
-
-This project implements an **AI agent using Google ADK and the Model Context Protocol (MCP)** to integrate external data and generate intelligent decisions.
-
-The agent:
-
-* Connects to a real-time **weather API**
-* Retrieves structured data via MCP tools
-* Uses the data to recommend **online or offline meetings**
-* Provides **clear, explainable reasoning**
+A modern **AI-powered Sales Assistant** built using FastAPI and deployed on Google Cloud Run.
+It provides intelligent responses to sales-related queries through a sleek chat-based UI.
 
 ---
 
-## 🎯 Problem Statement
+## 🚀 Features
 
-Build an AI agent that:
-
-* Uses MCP to connect to an external tool
-* Retrieves structured data
-* Uses that data to generate a response
-* Is implemented using ADK
-* Is deployed and accessible via Cloud Run
+* 💬 ChatGPT-style UI for interactive conversations
+* 🤖 AI-powered responses using GenAI agent
+* ⚡ FastAPI backend (high performance)
+* ☁️ Deployed on Google Cloud Run
+* 🎯 Sales-focused query handling (strategy, leads, conversion, outreach)
 
 ---
 
-## ✅ Solution
+## 🧠 Use Cases
 
-This project satisfies all requirements by:
-
-* Implementing an **ADK-based agent (`LlmAgent`)**
-* Using **MCPToolset** to integrate an external weather API
-* Retrieving structured weather data (temperature, conditions)
-* Applying reasoning logic to generate actionable insights
-* Deploying the solution on **Google Cloud Run**
+* 📊 Sales strategy recommendations
+* 📈 Conversion rate optimization tips
+* 📞 Cold outreach guidance
+* 🧾 Lead qualification insights
+* 🏢 CRM & pipeline suggestions
 
 ---
 
-## 🔌 MCP Tool Integration
+## 🏗️ Tech Stack
 
-### Tool: `get_weather(city)`
-
-* Connects to **OpenWeatherMap API**
-* Returns structured JSON:
-
-```json
-{
-  "city": "Bangalore",
-  "temperature": 28,
-  "condition": "clear sky"
-}
-```
-
-### MCP Flow
-
-User → Agent → MCP Tool → External API → Structured Data → Decision → Response
+* **Backend:** FastAPI (Python)
+* **Frontend:** HTML, CSS, JavaScript (Chat UI)
+* **AI Layer:** Custom Agent (ADK / GenAI)
+* **Deployment:** Google Cloud Run
+* **Language:** Python 3.10+
 
 ---
 
-## 🏗 Architecture
+## 📁 Project Structure
 
 ```
-User Request
-     ↓
-FastAPI (Cloud Run)
-     ↓
-ADK Agent (LlmAgent)
-     ↓
-MCP Tool (Weather)
-     ↓
-External API (OpenWeather)
-     ↓
-Structured Data
-     ↓
-Decision Logic
-     ↓
-Final Response
+weather-mcp-adk-agent/
+│── main.py
+│── run_agent.py
+│── requirements.txt
+│── adk_agent/
+│   ├── __init__.py
+│   └── weather_app/
+│       ├── __init__.py
+│       ├── agent.py
+│       └── tools.py
 ```
 
 ---
 
-## ✨ Features
+## ⚙️ Installation & Setup
 
-* 🔌 MCP-based tool integration
-* 🤖 ADK agent architecture
-* 🌐 Real-time external API usage
-* 🧠 Context-aware decision making
-* 📊 Structured & explainable output
-* ☁️ Cloud-native deployment (Cloud Run)
-
----
-
-## 💡 Use Case
-
-This agent helps users:
-
-* Decide whether to hold **online or offline meetings**
-* Choose **optimal meeting conditions**
-* Make **data-driven scheduling decisions**
-
----
-
-## ⚙️ Tech Stack
-
-* Python
-* FastAPI
-* Google ADK
-* MCP Toolset
-* OpenWeatherMap API
-* Google Cloud Run
-
----
-
-## 🧪 Example Query
-
-```
-/ask?query=schedule meeting in bangalore
-```
-
-### Example Output
-
-```
-📍 Location: Bangalore
-
-🌦 Weather:
-- Temperature: 32°C
-- Condition: scattered clouds
-
-🧠 Decision:
-→ ONLINE meeting recommended
-
-📌 Reason:
-Unfavorable weather conditions
-```
-
----
-
-## 🚀 How to Run Locally
+### 1️⃣ Clone the Repository
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+git clone <your-repo-url>
+cd weather-mcp-adk-agent
+```
+
+---
+
+### 2️⃣ Create Virtual Environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Mac/Linux
+.venv\Scripts\activate      # Windows
+```
+
+---
+
+### 3️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+---
+
+### 4️⃣ Run Locally
+
+```bash
 uvicorn main:app --reload
 ```
 
----
+Open:
 
-## 🔑 Environment Variables
-
-Set your API key:
-
-```bash
-export WEATHER_API_KEY=your_openweather_api_key
+```
+http://127.0.0.1:8000
 ```
 
 ---
 
-## 🏆 Key Highlights
+## ☁️ Deployment (Google Cloud Run)
 
-* Demonstrates **MCP-based agent design**
-* Uses **real external data**
-* Produces **actionable, explainable insights**
-* Handles **real-world constraints (model access limitations)** gracefully
+### Step 1: Authenticate
 
----
-
-## 🎤 Submission Statement
-
-> I built an AI agent using Google ADK and MCP Toolset to integrate an external weather API. The agent retrieves structured data and applies reasoning to recommend meeting types. The system is deployed on Cloud Run and demonstrates how agents can convert real-time data into actionable insights.
+```bash
+gcloud auth login
+gcloud config set project <your-project-id>
+```
 
 ---
 
-## 🙌 Conclusion
+### Step 2: Deploy
 
-This project showcases how **AI agents can move beyond simple responses** and instead provide **context-aware, data-driven decisions** using MCP-based integrations.
+```bash
+gcloud run deploy weather-agent \
+  --source . \
+  --region us-central1 \
+  --allow-unauthenticated
+```
+
+---
+
+## 🌐 API Endpoints
+
+| Endpoint         | Method | Description                  |
+| ---------------- | ------ | ---------------------------- |
+| `/`              | GET    | Chat UI (Sales AI Assistant) |
+| `/ask?query=...` | GET    | Returns AI response          |
+
+---
+
+## 🖥️ Demo
+
+👉 Open the deployed URL and start chatting with the AI assistant.
+
+Example Queries:
+
+* “Best sales strategy for startups”
+* “How to increase B2B conversion rate”
+* “Cold email tips for SaaS”
+
+---
+
+## ⚠️ Troubleshooting
+
+### ❌ ModuleNotFoundError
+
+* Ensure correct import path:
+
+```python
+from adk_agent.weather_app.agent import run_agent
+```
+
+### ❌ Cloud Run not starting
+
+* Check logs:
+
+```bash
+gcloud logs read
+```
+
+### ❌ Async error (`await`)
+
+* Remove `await` if function is not async
+
+---
+
+## 📌 Future Enhancements
+
+* 📊 Sales dashboard with analytics
+* 🧠 Context memory (conversation history)
+* 🔄 Streaming responses (typing effect)
+* 🎨 Advanced UI with Tailwind / React
+* 🔗 CRM integrations (Salesforce, HubSpot)
+
+---
+
+## 👩‍💻 Author
+
+**Ananya Shetty**
+
+* B.Com Final Year | GenAI Enthusiast
+* Focus: AI + Business + Product Development
+
+---
+
+## ⭐ Contribute
+
+Feel free to fork, improve, and submit PRs 🚀
+
+---
+
+## 📜 License
+
+This project is for learning and demonstration purposes.
