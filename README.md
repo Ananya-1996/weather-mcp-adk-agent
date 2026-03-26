@@ -176,7 +176,7 @@ gcloud logs read
 
 **Ananya Shetty**
 
-* B.Com Final Year | GenAI Enthusiast
+* SDE 3 JP Morgan Chase | GenAI Enthusiast
 * Focus: AI + Business + Product Development
 
 ---
