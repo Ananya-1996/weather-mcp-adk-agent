@@ -1,40 +1,116 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from agent import run_agent
+from fastapi import Query
+from adk_agent.weather_app.agent import run_agent
 
 app = FastAPI()
 
 
-@app.get("/")
+# ✅ Chat UI (Sales AI Assistant)
+@app.get("/", response_class=HTMLResponse)
 def home():
-    return {"message": "Sales AI Agent Running 🚀"}
-
-
-@app.get("/ask", response_class=HTMLResponse)
-def ask(query: str):
-    result = run_agent(query)
-
-    return f"""
+    return """
     <html>
     <head>
-        <title>Smart Sales Meeting Assistant</title>
+        <title>Sales AI Assistant</title>
+        <style>
+            body {
+                font-family: Arial;
+                background: #0f172a;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .chat-container {
+                width: 420px;
+                background: #1e293b;
+                border-radius: 12px;
+                padding: 15px;
+                box-shadow: 0px 0px 15px rgba(0,0,0,0.6);
+            }
+            .messages {
+                height: 420px;
+                overflow-y: auto;
+                margin-bottom: 10px;
+                padding: 5px;
+            }
+            .msg {
+                margin: 8px 0;
+                padding: 10px;
+                border-radius: 8px;
+                max-width: 80%;
+            }
+            .user {
+                background: #3b82f6;
+                text-align: right;
+                margin-left: auto;
+            }
+            .bot {
+                background: #334155;
+                text-align: left;
+                margin-right: auto;
+            }
+            input {
+                width: 70%;
+                padding: 10px;
+                border-radius: 5px;
+                border: none;
+                outline: none;
+            }
+            button {
+                padding: 10px;
+                border: none;
+                background: #22c55e;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        </style>
     </head>
-    <body style="font-family: Arial, sans-serif; background-color:#f5f7fa; padding:40px;">
 
-        <div style="max-width:700px; margin:auto; background:white; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <body>
+        <div class="chat-container">
+            <h2>🤖 Sales AI Assistant</h2>
 
-            <h2 style="color:#2c3e50;">🤖 Smart Sales Meeting Assistant</h2>
+            <div id="messages" class="messages"></div>
 
-            <p><b>Query:</b> {query}</p>
-
-            <hr style="margin:20px 0;"/>
-
-            <div style="white-space: pre-line; font-size:16px; color:#333;">
-                {result}
-            </div>
-
+            <input id="query" placeholder="Ask sales insights..." />
+            <button onclick="sendMessage()">Send</button>
         </div>
 
+        <script>
+            async function sendMessage() {
+                let input = document.getElementById("query");
+                let message = input.value;
+
+                if (!message) return;
+
+                let messagesDiv = document.getElementById("messages");
+
+                // user message
+                messagesDiv.innerHTML += `<div class="msg user">${message}</div>`;
+
+                input.value = "";
+
+                // call backend
+                let response = await fetch(`/ask?query=${encodeURIComponent(message)}`);
+                let data = await response.json();
+
+                // bot message
+                messagesDiv.innerHTML += `<div class="msg bot">${data.response}</div>`;
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+        </script>
     </body>
     </html>
     """
+
+
+# ✅ Backend API
+@app.get("/ask")
+def ask(query: str = Query(...)):
+    result = run_agent(query)  # ✅ no await
+    return {"response": result}
